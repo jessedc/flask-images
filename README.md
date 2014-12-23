@@ -42,6 +42,7 @@ https://gist.github.com/sigilioso/2957026
 - http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_Python_flask.html
 - http://docs.python-requests.org/en/latest/user/quickstart/#make-a-request
 - http://flask.pocoo.org/docs/0.10/
+- https://github.com/mikeboers/Flask-Images
 
 
 [1]: http://flask.pocoo.org
