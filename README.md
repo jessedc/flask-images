@@ -1,21 +1,21 @@
 # flask-images
 
-A flask application designed to run on elastic beanstalk as a worker that resizes images stored in S3 and place them back in S3 in a useful place.
+A [flask](http://flask.pocoo.org) application designed to run on Amazon Elastic Beanstalk [Worker Environment Tier](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features-managing-env-tiers.html) that responds to SQS messages generated from new images uploaded to a specific S3 bucket.
 
-# Dependencies
+flask-images will resize newly uploaded images into a set of preconfigured sizes and re-upload the images into size specific directories for easy, predictable access.
 
-You need python, pip, and virtualenv installed first.
+# Python Environment Setup
 
-Python comes with OSX, you might need sudo for these two commands - don't worry because the rest of the decencies will be installed locally in the python virtual environment.
+Getting your python environment setup on OSX is not too hard. [This guide](http://docs.python-guide.org/en/latest/starting/install/osx/) is a good place to start.
+
+**tldr; install homebew and do the following:**
 
 ```sh
-easy_install pip
+brew install python
 pip install virtualenv
 ```
 
-# Running flas-images
-
-Setup your local development.
+# Running flask-images
 
 ```sh
 git clone git@github.com:jessedc/flask-images.git
@@ -23,11 +23,6 @@ cd flask-images
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
-```
-
-It's a simple python [flask][1] application. 
-
-```sh
 python hello.py
 ```
 
@@ -36,8 +31,9 @@ Take your browser to [http://localhost:5000](http://localhost:5000)
 
 # Bits 
 
-# Image Resizing Examples
+## Image Resizing Examples
 
 https://gist.github.com/sigilioso/2957026
 
 [1]: http://flask.pocoo.org
+[2]: http://docs.python-guide.org/en/latest/
