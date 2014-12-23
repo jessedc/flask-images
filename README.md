@@ -37,7 +37,11 @@ https://gist.github.com/sigilioso/2957026
 
 # Links
 
-http://sullerton.com/2012/02/debugging-a-flask-app-inside-pycharm/
+- http://sullerton.com/2012/02/debugging-a-flask-app-inside-pycharm/
+- https://pillow.readthedocs.org/handbook/tutorial.html#using-the-image-class
+- http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_Python_flask.html
+- http://docs.python-requests.org/en/latest/user/quickstart/#make-a-request
+- http://flask.pocoo.org/docs/0.10/
 
 
 [1]: http://flask.pocoo.org
