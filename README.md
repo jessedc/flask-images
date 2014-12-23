@@ -2,13 +2,13 @@
 
 A [flask](http://flask.pocoo.org) application designed to run on Amazon Elastic Beanstalk [Worker Environment Tier](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features-managing-env-tiers.html) that responds to SQS messages generated from new images uploaded to a specific S3 bucket.
 
-flask-images will resize newly uploaded images into a set of preconfigured sizes and re-upload the images into size specific directories for easy, predictable access.
+flask-images will resize newly uploaded images into a set of pre-configured sizes and re-upload the images into size specific directories for easy, predictable access.
 
 # Python Environment Setup
 
 Getting your python environment setup on OSX is not too hard. [This guide](http://docs.python-guide.org/en/latest/starting/install/osx/) is a good place to start.
 
-**tldr; install homebew and do the following:**
+**tldr; install homebrew and do the following:**
 
 ```sh
 brew install python
