@@ -35,5 +35,10 @@ Take your browser to [http://localhost:5000](http://localhost:5000)
 
 https://gist.github.com/sigilioso/2957026
 
+# Links
+
+http://sullerton.com/2012/02/debugging-a-flask-app-inside-pycharm/
+
+
 [1]: http://flask.pocoo.org
 [2]: http://docs.python-guide.org/en/latest/
