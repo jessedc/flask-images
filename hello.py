@@ -1,17 +1,38 @@
-from flask import Flask
+# coding=utf8
+
+from flask import Flask, send_file
 from flask import request
 import requests
+from PIL import Image
+from StringIO import StringIO
+import ImageResizer
 
 app = Flask(__name__)
 
-@app.route("/")
-def hello():
+@app.route("/<int:width>/<int:height>/<mode>")
+def hello(width=100, height=100, mode='top'):
 
     url = request.args.get('url')
 
-    img_request = requests.get(url)
+    # http://docs.python-requests.org/en/latest/user/quickstart/#errors-and-exceptions
+    # try:
+    r = requests.get(url)
+    # except ConnectionError:
+    #     pass
 
-    return "Hello World!"
+    im = Image.open(StringIO(r.content))
+
+    resized_image = ImageResizer.resize_and_crop(im, (width, height), mode)
+
+    return serve_pil_image(resized_image)
+
+
+def serve_pil_image(pil_img):
+    img_io = StringIO()
+    pil_img.save(img_io, 'JPEG', quality=70)
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/jpeg')
+
 
 if __name__ == "__main__":
     import argparse
