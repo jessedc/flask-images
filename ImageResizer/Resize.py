@@ -2,9 +2,15 @@
 
 from PIL import Image
 
+IMAGE_RESIZE_RULE_FIT = "fit"
+IMAGE_RESIZE_RULE_FILL = "fill"
+IMAGE_RESIZE_RULE_CROP_TOP = "top"
+IMAGE_RESIZE_RULE_CROP_BOTTOM = "bottom"
+IMAGE_RESIZE_RULE_CROP_MIDDLE = "middle"
+
 
 # source https://gist.github.com/sigilioso/2957026#comment-1241684
-def resize_and_crop(img, size, crop_type='top'):
+def resize_and_crop(img, size, crop_type):
     """
     Resize and crop an image to fit the specified size.
 
@@ -15,7 +21,7 @@ def resize_and_crop(img, size, crop_type='top'):
     :raises ValueError: if an invalid `crop_type` is provided.
     """
     # If height is higher we resize vertically, if not we resize horizontally
-    # img = Image.open(img_path)
+
     # Get current and desired ratio for the images
     img_ratio = img.size[0] / float(img.size[1])
     ratio = size[0] / float(size[1])
@@ -23,11 +29,11 @@ def resize_and_crop(img, size, crop_type='top'):
     if ratio > img_ratio:
         img = img.resize((size[0], int(round(size[0] * img.size[1] / img.size[0]))), Image.ANTIALIAS)
         # Crop in the top, middle or bottom
-        if crop_type == 'top':
+        if crop_type == IMAGE_RESIZE_RULE_CROP_TOP:
             box = (0, 0, img.size[0], size[1])
-        elif crop_type == 'middle':
+        elif crop_type == IMAGE_RESIZE_RULE_CROP_MIDDLE:
             box = (0, int(round((img.size[1] - size[1]) / 2)), img.size[0], int(round((img.size[1] + size[1]) / 2)))
-        elif crop_type == 'bottom':
+        elif crop_type == IMAGE_RESIZE_RULE_CROP_BOTTOM:
             box = (0, img.size[1] - size[1], img.size[0], img.size[1])
         else:
             raise ValueError('ERROR: invalid value for crop_type')
@@ -35,17 +41,16 @@ def resize_and_crop(img, size, crop_type='top'):
     elif ratio < img_ratio:
         img = img.resize((int(round(size[1] * img.size[0] / img.size[1])), size[1]), Image.ANTIALIAS)
         # Crop in the top, middle or bottom
-        if crop_type == 'top':
+        if crop_type == IMAGE_RESIZE_RULE_CROP_TOP:
             box = (0, 0, size[0], img.size[1])
-        elif crop_type == 'middle':
+        elif crop_type == IMAGE_RESIZE_RULE_CROP_MIDDLE:
             box = (int(round((img.size[0] - size[0]) / 2)), 0, int(round((img.size[0] + size[0]) / 2)), img.size[1])
-        elif crop_type == 'bottom':
+        elif crop_type == IMAGE_RESIZE_RULE_CROP_BOTTOM:
             box = (img.size[0] - size[0], 0, img.size[0], img.size[1])
         else:
             raise ValueError('ERROR: invalid value for crop_type')
         img = img.crop(box)
     else:
         img = img.resize((size[0], size[1]), Image.ANTIALIAS)
-    # If the scale is the same, we do not need to crop
-    # img.save(modified_path)
+
     return img

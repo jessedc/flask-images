@@ -1,16 +1,18 @@
 # coding=utf8
 
+from ImageResizer.Resize import *
+
 from flask import Flask, send_file
 from flask import request
 import requests
 from PIL import Image
 from StringIO import StringIO
-import ImageResizer
+
 
 app = Flask(__name__)
 
 @app.route("/<int:width>/<int:height>/<mode>")
-def hello(width=100, height=100, mode='top'):
+def hello(width=100, height=100, mode=IMAGE_RESIZE_RULE_CROP_TOP):
 
     url = request.args.get('url')
 
@@ -22,7 +24,7 @@ def hello(width=100, height=100, mode='top'):
 
     im = Image.open(StringIO(r.content))
 
-    resized_image = ImageResizer.resize_and_crop(im, (width, height), mode)
+    resized_image = resize_and_crop(im, (width, height), mode)
 
     return serve_pil_image(resized_image)
 
