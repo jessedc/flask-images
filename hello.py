@@ -12,7 +12,7 @@ from StringIO import StringIO
 app = Flask(__name__)
 
 @app.route("/<int:width>/<int:height>/<mode>")
-def hello(width=100, height=100, mode=IMAGE_RESIZE_RULE_CROP_TOP):
+def hello(width=100, height=100, mode=IMAGE_RESIZE_RULE_CROP_MIDDLE):
 
     url = request.args.get('url')
 
