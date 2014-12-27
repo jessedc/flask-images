@@ -15,6 +15,8 @@ brew install python
 pip install virtualenv
 ```
 
+> Future: Create a vagrant environment for this project. (suggested base box [here](https://vagrantcloud.com/notch-interactive/boxes/trusty64-python))
+
 # Running flask-images
 
 ```sh
@@ -42,6 +44,7 @@ https://gist.github.com/sigilioso/2957026
 - http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_Python_flask.html
 - http://docs.python-requests.org/en/latest/user/quickstart/#make-a-request
 - http://flask.pocoo.org/docs/0.10/
+- https://github.com/mikeboers/Flask-Images
 
 
 [1]: http://flask.pocoo.org
