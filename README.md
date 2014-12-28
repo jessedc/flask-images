@@ -30,15 +30,14 @@ python hello.py
 
 Take your browser to [http://localhost:5000](http://localhost:5000)
 
+# Resizing Images
 
-# Bits 
+The app has two resize modes, `resize` and `resize-crop`. Resize will resize the image to within the parameters you specifcy and keep the aspect ratio. Resize-crop will do the first resize then crop to the exact size from the centre point.  
 
-## Image Resizing Examples
-
-https://gist.github.com/sigilioso/2957026
 
 # Links
 
+- https://gist.github.com/sigilioso/2957026
 - http://sullerton.com/2012/02/debugging-a-flask-app-inside-pycharm/
 - https://pillow.readthedocs.org/handbook/tutorial.html#using-the-image-class
 - http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_Python_flask.html
