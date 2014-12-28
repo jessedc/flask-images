@@ -1,5 +1,7 @@
 # flask-images
 
+[![Build Status](https://travis-ci.org/jessedc/flask-images.svg?branch=master)](https://travis-ci.org/jessedc/flask-images)
+
 A [flask](http://flask.pocoo.org) application designed to run on Amazon Elastic Beanstalk [Worker Environment Tier](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features-managing-env-tiers.html) that responds to SQS messages generated from new images uploaded to a specific S3 bucket.
 
 flask-images will resize newly uploaded images into a set of pre-configured sizes and re-upload the images into size specific directories for easy, predictable access.
