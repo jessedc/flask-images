@@ -1,18 +1,20 @@
 # coding=utf8
+from urlparse import urlparse
+
+from flask import Flask, send_file
+from flask import request
 
 import os
+import requests
+import boto
 from boto.s3.key import Key
+from PIL import Image
+from StringIO import StringIO
+from requests.packages.urllib3.connection import ConnectionError
 
 from ImageResizer.Resize import *
 from ImageResizer.Size import *
 
-from flask import Flask, send_file
-from flask import request
-import requests
-from PIL import Image
-from StringIO import StringIO
-from requests.packages.urllib3.connection import ConnectionError
-import boto
 
 app = Flask(__name__)
 
@@ -39,17 +41,37 @@ def view(width=100, height=100, mode=IMAGE_RESIZE_RULE_CROP_NONE):
     return send_file(img_io, mimetype='image/jpeg')
 
 
-@app.route("/")
-def resize_all():
+@app.route("/", methods=['GET'])
+def resize_at_url():
 
-    im = fetch_image_from_url(request.args.get('url'))
+    url_string = request.args.get('url')
+
+    im = fetch_image_from_url(url_string)
 
     connection = boto.connect_s3()
     bucket = connection.get_bucket(AWS_BUCKET_NAME)
 
-    resize_and_save_image(bucket, im, image_sizes, "test-image2.jpg")
+    url = urlparse(url_string)
+    filename = url[2].split('/')[-1]
+    resize_and_save_image(bucket, im, image_sizes, filename)
 
     return "OK"
+
+@app.route("/", methods=['POST'])
+def resize_from_post():
+
+    # url_string = request.args.get('url')
+    #
+    # im = fetch_image_from_url(url_string)
+    #
+    # connection = boto.connect_s3()
+    # bucket = connection.get_bucket(AWS_BUCKET_NAME)
+    #
+    # url = urlparse(url_string)
+    # filename = url[2].split('/')[-1]
+    # resize_and_save_image(bucket, im, image_sizes, filename)
+
+    return "OK-POST"
 
 
 def fetch_image_from_url(url):
@@ -65,7 +87,7 @@ def fetch_image_from_url(url):
 def resize_and_save_image(bucket, image, sizes, image_name):
 
     for size in sizes:
-        resized_image = resize_and_crop(image, (size["width"], size["height"]), size["mode"])
+        resized_image = resize_and_crop(image, (size.width, size.height), size.mode)
 
         img_io = StringIO()
         resized_image.save(img_io, 'JPEG', quality=70)
