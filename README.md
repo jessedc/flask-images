@@ -32,9 +32,34 @@ python hello.py
 
 Take your browser to [http://localhost:5000](http://localhost:5000)
 
-# Resizing Images
+# Required Environment Variables
 
-The app has two resize modes, `resize` and `resize-crop`. Resize will resize the image to within the parameters you specifcy and keep the aspect ratio. Resize-crop will do the first resize then crop to the exact size from the centre point.  
+
+ - **AWS_ACCESS_KEY_ID** AWS access key
+ - **AWS_SECRET_ACCESS_KEY** AWS secret
+ - **AWS_BUCKET_NAME** The name of the bucket the image will be uploaded too
+
+
+# Size Configuration
+
+The app will automatically resize the input image based on a fixed set of sizes read from a `size.json` file locaded in the root directory.
+
+```json
+{ "sizes": [
+  {"width":193, "height": 130, "mode": "resize-crop"},
+  ...
+  ]
+}
+  
+```
+
+# Resizing Modes
+
+The app has two resize modes, `resize` and `resize-crop`. 
+
+Resize will resize the image to within the parameters you specifcy and keep the aspect ratio. 
+
+Resize-crop will do the first resize then crop to the exact size from the centre point.  
 
 
 # Links

@@ -4,7 +4,7 @@ from unittest import TestCase
 from ImageResizer.Resize import best_image_size, best_image_crop
 
 
-class ImageSizeTests(TestCase):
+class ResizeTests(TestCase):
 
     # landscape (1.33) to landscape (1.26)
     def test_best_fit_case_1(self):
