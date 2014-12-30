@@ -15,8 +15,10 @@ from requests.packages.urllib3.connection import ConnectionError
 from ImageResizer.Resize import *
 from ImageResizer.Size import *
 
+import logging
+from logging.handlers import RotatingFileHandler
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 image_sizes = sizes_from_file('sizes.json')
 
@@ -29,7 +31,12 @@ AWS_ACL = 'public-read'
 
 AWS_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
 
-@app.route("/view/<int:width>/<int:height>/<mode>")
+@application.before_request
+def log_request():
+    if application.config.get('DEBUG'):
+        application.logger.debug(request.json)
+
+@application.route("/view/<int:width>/<int:height>/<mode>")
 def view(width=100, height=100, mode=IMAGE_RESIZE_RULE_CROP_NONE):
 
     im = fetch_image_from_url(request.args.get('url'))
@@ -41,7 +48,7 @@ def view(width=100, height=100, mode=IMAGE_RESIZE_RULE_CROP_NONE):
     return send_file(img_io, mimetype='image/jpeg')
 
 
-@app.route("/", methods=['GET'])
+@application.route("/", methods=['GET'])
 def resize_at_url():
 
     url_string = request.args.get('url')
@@ -50,6 +57,7 @@ def resize_at_url():
 
     connection = boto.connect_s3()
     bucket = connection.get_bucket(AWS_BUCKET_NAME)
+    application.logger.info("Connecting to bucket %s", AWS_BUCKET_NAME)
 
     url = urlparse(url_string)
     filename = url[2].split('/')[-1]
@@ -57,16 +65,19 @@ def resize_at_url():
 
     return "OK"
 
-@app.route("/", methods=['POST'])
+@application.route("/", methods=['POST'])
 def resize_from_post():
+
+    connection = boto.connect_s3()
+    bucket = connection.get_bucket(AWS_BUCKET_NAME)
+
+    application.logger.info('Connecting to bucket %s', AWS_BUCKET_NAME)
 
     # url_string = request.args.get('url')
     #
     # im = fetch_image_from_url(url_string)
     #
-    # connection = boto.connect_s3()
-    # bucket = connection.get_bucket(AWS_BUCKET_NAME)
-    #
+
     # url = urlparse(url_string)
     # filename = url[2].split('/')[-1]
     # resize_and_save_image(bucket, im, image_sizes, filename)
@@ -89,26 +100,23 @@ def resize_and_save_image(bucket, image, sizes, image_name):
     for size in sizes:
         resized_image = resize_and_crop(image, (size.width, size.height), size.mode)
 
+        application.logger.debug('Resizing Image (w %d, h %d, m %s) %s', size.width, size.height, size.mode, image_name)
+
         img_io = StringIO()
         resized_image.save(img_io, 'JPEG', quality=70)
 
         k = Key(bucket)
         k.key = size.key_name_for_size(image_name)
+
+        application.logger.debug('Creating key name for Image %s', k.key)
+
         k.set_contents_from_string(img_io.getvalue(), headers=AWS_HEADERS, replace=True, policy=AWS_ACL)
 
 
 if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser(description='Development Server Help')
-    parser.add_argument("-d", "--debug", action="store_true", dest="debug_mode",
-                        help="run in debug mode (for use with PyCharm)", default=False)
 
-    cmd_args = parser.parse_args()
-    app_options = {}
+    handler = RotatingFileHandler('application.log', maxBytes=100000, backupCount=1)
+    handler.setLevel(logging.DEBUG)
+    application.logger.addHandler(handler)
 
-    if cmd_args.debug_mode:
-        app_options["debug"] = True
-        app_options["use_debugger"] = False
-        app_options["use_reloader"] = False
-
-    app.run(**app_options)
+    application.run(host='0.0.0.0', debug=True, use_reloader=False, use_debugger=False)
