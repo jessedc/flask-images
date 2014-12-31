@@ -1,0 +1,10 @@
+{ "sizes": [
+  {"width":193, "height": 130, "mode": "resize-crop"},
+  {"width":298, "height": 130, "mode": "resize-crop"},
+  {"width":80, "height": 80, "mode": "resize-crop"},
+  {"width":659, "height": 280, "mode": "resize-crop"},
+  {"width":143, "height": 180, "mode": "resize-crop"},
+  {"width":286, "height": 216, "mode": "resize-crop"},
+  {"width":619, "height": 465, "mode": "resize-crop"}
+]
+}

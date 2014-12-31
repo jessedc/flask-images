@@ -52,18 +52,19 @@ def view(width=100, height=100, mode=IMAGE_RESIZE_RULE_CROP_NONE):
 def resize_at_url():
 
     url_string = request.args.get('url')
+    if url_string is not None:
 
-    im = fetch_image_from_url(url_string)
+        im = fetch_image_from_url(url_string)
 
-    connection = boto.connect_s3()
-    bucket = connection.get_bucket(AWS_BUCKET_NAME)
-    application.logger.info("Connecting to bucket %s", AWS_BUCKET_NAME)
+        connection = boto.connect_s3()
+        bucket = connection.get_bucket(AWS_BUCKET_NAME)
+        application.logger.info("Connecting to bucket %s", AWS_BUCKET_NAME)
 
-    url = urlparse(url_string)
-    filename = url[2].split('/')[-1]
-    resize_and_save_image(bucket, im, image_sizes, filename)
+        url = urlparse(url_string)
+        filename = url[2].split('/')[-1]
+        resize_and_save_image(bucket, im, image_sizes, filename)
 
-    return "OK"
+    return
 
 @application.route("/", methods=['POST'])
 def resize_from_post():
@@ -82,7 +83,7 @@ def resize_from_post():
     # filename = url[2].split('/')[-1]
     # resize_and_save_image(bucket, im, image_sizes, filename)
 
-    return "OK-POST"
+    return
 
 
 def fetch_image_from_url(url):
