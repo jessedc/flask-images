@@ -3,6 +3,7 @@ venv
 .idea
 output
 *.log
+deploy
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

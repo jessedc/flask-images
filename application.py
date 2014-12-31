@@ -64,26 +64,23 @@ def resize_at_url():
         filename = url[2].split('/')[-1]
         resize_and_save_image(bucket, im, image_sizes, filename)
 
-    return
+    return "OK"
+
 
 @application.route("/", methods=['POST'])
 def resize_from_post():
 
     connection = boto.connect_s3()
-    bucket = connection.get_bucket(AWS_BUCKET_NAME)
 
-    application.logger.info('Connecting to bucket %s', AWS_BUCKET_NAME)
+    application.logger.info('Connecting to s3')
 
-    # url_string = request.args.get('url')
-    #
-    # im = fetch_image_from_url(url_string)
-    #
+    records = json.loads(request.json["Message"])["Records"]
+    application.logger.info('Decoded %d Records', len(records))
 
-    # url = urlparse(url_string)
-    # filename = url[2].split('/')[-1]
-    # resize_and_save_image(bucket, im, image_sizes, filename)
+    for record in records:
+        process_record(connection, record)
 
-    return
+    return "OK"
 
 
 def fetch_image_from_url(url):
@@ -114,10 +111,33 @@ def resize_and_save_image(bucket, image, sizes, image_name):
         k.set_contents_from_string(img_io.getvalue(), headers=AWS_HEADERS, replace=True, policy=AWS_ACL)
 
 
+def process_record(connection, record):
+    if record['eventName'] == u"ObjectCreated:Put":
+
+        src_bucket = connection.get_bucket(record['s3']['bucket']['name'])
+        src_key = Key(src_bucket)
+        src_key.key = record['s3']['object']['key']
+
+        img_io = StringIO()
+        src_key.get_contents_to_file(img_io)
+        img_io.seek(0)
+        im = Image.open(img_io)
+
+        dest_bucket = connection.get_bucket(AWS_BUCKET_NAME)
+        filename = src_key.key.split('/')[-1]
+        resize_and_save_image(dest_bucket, im, image_sizes, filename)
+
+
 if __name__ == "__main__":
 
     handler = RotatingFileHandler('application.log', maxBytes=100000, backupCount=1)
     handler.setLevel(logging.DEBUG)
     application.logger.addHandler(handler)
 
-    application.run(host='0.0.0.0', debug=True, use_reloader=False, use_debugger=False)
+    config = {'host': '0.0.0.0'}
+    if os.environ.get('FLASK_DEBUG') is not None:
+        config['debug'] = True
+        config['use_reloader'] = False
+        config['use_debugger'] = False
+
+    application.run(**config)
