@@ -1,5 +1,6 @@
 # coding=utf8
 from urlparse import urlparse
+import sys
 
 from flask import Flask, send_file
 from flask import request
@@ -19,6 +20,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 application = Flask(__name__)
+application.debug = os.environ.get('FLASK_DEBUG') is not None
 
 image_sizes = sizes_from_file('sizes.json')
 
@@ -63,6 +65,8 @@ def resize_at_url():
         url = urlparse(url_string)
         filename = url[2].split('/')[-1]
         resize_and_save_image(bucket, im, image_sizes, filename)
+    else:
+        application.logger.info('Received / GET request')
 
     return "OK"
 
@@ -129,15 +133,16 @@ def process_record(connection, record):
 
 
 if __name__ == "__main__":
-
-    handler = RotatingFileHandler('application.log', maxBytes=100000, backupCount=1)
-    handler.setLevel(logging.DEBUG)
-    application.logger.addHandler(handler)
+    # logging.basicConfig(filename=os.environ.get('FLASK_LOG_LOCATION'), level=logging.DEBUG)
+    # handler = RotatingFileHandler(, maxBytes=100000)
+    # handler.setLevel(logging.DEBUG)
+    # application.logger.addHandler(handler)
+    # application.logger.addHandler(logging.StreamHandler(stream=sys.stderr))
 
     config = {'host': '0.0.0.0'}
-    if os.environ.get('FLASK_DEBUG') is not None:
-        config['debug'] = True
-        config['use_reloader'] = False
-        config['use_debugger'] = False
+    # if os.environ.get('FLASK_DEBUG') is not None:
+    # config['debug'] = True
+        # config['use_reloader'] = False
+        # config['use_debugger'] = False
 
     application.run(**config)
