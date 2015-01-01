@@ -77,12 +77,15 @@ def resize_from_post():
     connection = boto.connect_s3()
 
     application.logger.info('Connecting to s3')
+    if request.json is not None:
+        records = json.loads(request.json["Message"])["Records"]
+        application.logger.info('Decoded %d Records', len(records))
 
-    records = json.loads(request.json["Message"])["Records"]
-    application.logger.info('Decoded %d Records', len(records))
-
-    for record in records:
-        process_record(connection, record)
+        for record in records:
+            process_record(connection, record)
+    else:
+        # TODO: Use correct HTTP error response
+        return "No JSON Found"
 
     return "OK"
 
