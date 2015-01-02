@@ -16,9 +16,6 @@ from requests.packages.urllib3.connection import ConnectionError
 from ImageResizer.Resize import *
 from ImageResizer.Size import *
 
-import logging
-from logging.handlers import RotatingFileHandler
-
 application = Flask(__name__)
 application.debug = os.environ.get('FLASK_DEBUG') is not None
 
@@ -136,16 +133,4 @@ def process_record(connection, record):
 
 
 if __name__ == "__main__":
-    # logging.basicConfig(filename=os.environ.get('FLASK_LOG_LOCATION'), level=logging.DEBUG)
-    # handler = RotatingFileHandler(, maxBytes=100000)
-    # handler.setLevel(logging.DEBUG)
-    # application.logger.addHandler(handler)
-    # application.logger.addHandler(logging.StreamHandler(stream=sys.stderr))
-
-    config = {'host': '0.0.0.0'}
-    # if os.environ.get('FLASK_DEBUG') is not None:
-    # config['debug'] = True
-        # config['use_reloader'] = False
-        # config['use_debugger'] = False
-
-    application.run(**config)
+    application.run(host='0.0.0.0')
