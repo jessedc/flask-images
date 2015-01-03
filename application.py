@@ -50,7 +50,6 @@ def resize_at_url():
     url_string = request.args.get('url')
     if url_string is not None:
 
-        # http://docs.python-requests.org/en/latest/user/quickstart/#errors-and-exceptions
         try:
             r = requests.get(url_string)
         except ConnectionError:
@@ -65,8 +64,6 @@ def resize_at_url():
         url = urlparse(url_string)
         filename = url[2].split('/')[-1]
         resize_and_save_image(bucket, im, image_sizes, filename)
-    # else:
-    #     application.logger.info('Received / GET request')
 
     return ""
 
