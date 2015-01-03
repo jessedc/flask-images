@@ -14,6 +14,7 @@ from ImageResizer.Size import *
 
 application = Flask(__name__)
 application.debug = os.environ.get('FLASK_DEBUG') is not None
+application.debug_log_format = '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
 
 image_sizes = sizes_from_file('sizes.json')
 
