@@ -27,21 +27,16 @@ AWS_ACL = 'public-read'
 
 AWS_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
 
-# @application.before_request
-# def log_request():
-#     if application.config.get('DEBUG'):
-#         application.logger.debug(request.json)
+@application.route("/test/<int:width>/<int:height>/<mode>/<name>")
+def testRoute(width=100, height=100, mode=IMAGE_RESIZE_RULE_CROP_NONE, name='test/testImage.jpg'):
 
-# @application.route("/view/<int:width>/<int:height>/<mode>")
-# def view(width=100, height=100, mode=IMAGE_RESIZE_RULE_CROP_NONE):
-#
-#     im = fetch_image_from_url(request.args.get('url'))
-#     resized_image = resize_and_crop(im, (width, height), mode)
-#
-#     img_io = StringIO()
-#     resized_image.save(img_io, 'JPEG', quality=70)
-#     img_io.seek(0)
-#     return send_file(img_io, mimetype='image/jpeg')
+    im = Image.open('test/testImage.jpg')
+    resized_image = resize_and_crop(im, (width, height), mode)
+
+    img_io = StringIO()
+    resized_image.save(img_io, 'JPEG', quality=40)
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/jpeg')
 
 
 @application.route("/", methods=['GET'])
