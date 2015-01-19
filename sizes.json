@@ -16,6 +16,7 @@
   {"width":1136, "height": 1136, "mode": "resize"},
   {"width":619, "height": 465, "mode": "resize-crop"},
   {"width":70, "height": 70, "mode": "resize-crop"},
-  {"width":306, "height": 306, "mode": "resize-crop"}
+  {"width":306, "height": 306, "mode": "resize-crop"},
+  {"width":280, "height": 406, "mode": "resize-crop"}
 ]
 }
