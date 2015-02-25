@@ -114,7 +114,7 @@ def resize_and_save_image(bucket, image, sizes, image_name):
         application.logger.info('Resizing %s to %s', image_name, resized_key_name)
 
         img_io = StringIO()
-        resized_image.save(img_io, 'JPEG', quality=70)
+        resized_image.save(img_io, 'JPEG', quality=90)
 
         k = Key(bucket)
         k.key = resized_key_name
