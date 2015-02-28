@@ -1,4 +1,5 @@
 # coding=utf8
+import urllib
 from urlparse import urlparse
 from flask import Flask, send_file, abort, request
 import os
@@ -88,7 +89,7 @@ def process_record(connection, record):
 
         src_bucket = connection.get_bucket(record['s3']['bucket']['name'])
         src_key = Key(src_bucket)
-        src_key.key = record['s3']['object']['key']
+        src_key.key = urllib.unquote_plus(urllib.unquote(record['s3']['object']['key'])).decode('utf8')
 
         img_io = StringIO()
         src_key.get_contents_to_file(img_io)
