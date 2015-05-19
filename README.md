@@ -8,16 +8,15 @@ flask-images will resize newly uploaded images into a set of pre-configured size
 
 # Python Environment Setup
 
-Getting your python environment setup on OSX is not too hard. [This guide](http://docs.python-guide.org/en/latest/starting/install/osx/) is a good place to start.
+Getting your python environment setup on OSX is not too hard. [This guide](http://docs.python-guide.org/en/latest/starting/install/osx/) is a good place to start if you want to read up on it all.
 
-**tldr; install homebrew and do the following:**
+As of Python 2.7.9 pip is already installed (check with `which pip`), just installing `virtualenv` for the global user might be enough. 
 
 ```sh
-brew install python
 pip install virtualenv
-```
+``` 
 
-> Future: Create a vagrant environment for this project. (suggested base box [here](https://vagrantcloud.com/notch-interactive/boxes/trusty64-python))
+> You might need sudo
 
 # Running flask-images
 
@@ -27,7 +26,7 @@ cd flask-images
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python hello.py
+python application.py
 ```
 
 Take your browser to [http://localhost:5000](http://localhost:5000)
@@ -42,7 +41,7 @@ Take your browser to [http://localhost:5000](http://localhost:5000)
 
 # Size Configuration
 
-The app will automatically resize the input image based on a fixed set of sizes read from a `size.json` file locaded in the root directory.
+The app will automatically resize the input image based on a fixed set of sizes read from a `size.json` file located in the root directory.
 
 ```json
 { "sizes": [
@@ -57,7 +56,7 @@ The app will automatically resize the input image based on a fixed set of sizes 
 
 The app has two resize modes, `resize` and `resize-crop`. 
 
-Resize will resize the image to within the parameters you specifcy and keep the aspect ratio. 
+Resize will resize the image to within the parameters you specify and keep the aspect ratio. 
 
 Resize-crop will do the first resize then crop to the exact size from the centre point.  
 
